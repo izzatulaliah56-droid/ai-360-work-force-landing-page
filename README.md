@@ -13,6 +13,10 @@ Fail utama:
 
 Untuk Vercel, import repo ini dan deploy sebagai static site.
 
+## Supabase
+
+Supabase tidak wajib untuk landing page statik ini. Jika mahu tambah tracking klik pembelian kemudian, rujuk `supabase/schema.sql`.
+
 ## Environment
 
 Jika sambung fungsi Supabase kemudian, set environment variable di Vercel:
