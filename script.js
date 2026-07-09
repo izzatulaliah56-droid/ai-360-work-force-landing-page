@@ -36,6 +36,48 @@ document.querySelectorAll("[data-accordion-group]").forEach((group) => {
   });
 });
 
+/* ---- Scroll reveal effects ------------------------------------------ */
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (!prefersReducedMotion && "IntersectionObserver" in window) {
+  const revealSelectors = [
+    ".hero-copy > *",
+    ".section-heading > *",
+    ".student-result-card",
+    ".reason-card",
+    ".stats-grid article",
+    ".accordion-item",
+    ".value-summary",
+    ".promo-card",
+    ".faq-layout > div:first-child > *",
+    ".faq-accordion .accordion-item"
+  ];
+
+  const targets = document.querySelectorAll(revealSelectors.join(","));
+
+  targets.forEach((el) => el.classList.add("reveal"));
+
+  const io = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const parent = el.parentElement;
+        const siblings = parent ? Array.from(parent.children).filter((c) => c.classList.contains("reveal")) : [el];
+        const index = Math.max(0, siblings.indexOf(el));
+        el.style.transitionDelay = `${Math.min(index * 70, 420)}ms`;
+        el.classList.add("is-revealed");
+        observer.unobserve(el);
+      });
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+  );
+
+  targets.forEach((el) => io.observe(el));
+} else {
+  document.querySelectorAll(".reveal").forEach((el) => el.classList.add("is-revealed"));
+}
+
 const countdownHours = document.querySelector("[data-countdown-hours]");
 const countdownMinutes = document.querySelector("[data-countdown-minutes]");
 const countdownSeconds = document.querySelector("[data-countdown-seconds]");
